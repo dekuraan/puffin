@@ -224,7 +224,8 @@ impl FrameView {
 
     /// Export profile data as a `.puffin` file/stream.
     #[cfg(feature = "serialization")]
-    #[cfg(not(target_arch = "wasm32"))] // compression not supported on wasm
+    // Upstream gates this off on wasm32. wam's fork keeps it enabled because
+    // `PackedStreams::pack` only uses `lz4_flex` (pure-Rust, wasm-safe).
     pub fn write(&self, write: &mut impl std::io::Write) -> anyhow::Result<()> {
         write.write_all(b"PUF0")?;
 

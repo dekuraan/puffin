@@ -404,7 +404,7 @@ impl FrameDataState {
         }
     }
 
-    #[cfg(not(target_arch = "wasm32"))] // compression not supported on wasm
+    // wam fork: wasm32 gate removed — `lz4_flex` is pure-Rust and works on wasm.
     fn packed(&self) -> Option<&PackedStreams> {
         match self {
             FrameDataState::Unpacked(_) => None,
@@ -421,7 +421,7 @@ impl FrameDataState {
         }
     }
 
-    #[cfg(not(target_arch = "wasm32"))] // compression not supported on wasm
+    // wam fork: wasm32 gate removed — see `packed()` above.
     fn pack_and_keep(&mut self) {
         if let FrameDataState::Unpacked(ref unpacked) = *self {
             let packed = PackedStreams::pack(&unpacked.thread_streams);
@@ -551,13 +551,13 @@ impl FrameData {
     }
 
     /// Create a packed storage without freeing the unpacked storage.
-    #[cfg(not(target_arch = "wasm32"))] // compression not supported on wasm
+    // wam fork: wasm32 gate removed — see `FrameDataState::packed()`.
     fn create_packed(&self) {
         self.data.write().pack_and_keep();
     }
 
     /// Writes one [`FrameData`] into a stream, prefixed by its length ([`u32`] le).
-    #[cfg(not(target_arch = "wasm32"))] // compression not supported on wasm
+    // wam fork: wasm32 gate removed — see `FrameDataState::packed()`.
     #[cfg(feature = "serialization")]
     pub fn write_into(
         &self,
